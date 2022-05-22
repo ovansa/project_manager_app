@@ -12,3 +12,7 @@ export const connectToDB = async () => {
     process.exit(1);
   }
 };
+
+export const disconnectDB = async () => {
+  await mongoose.disconnect();
+};
