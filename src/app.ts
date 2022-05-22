@@ -22,6 +22,7 @@ app.use('/', health);
 
 export default app;
 
+// TODO: Setup test to use local database
 // TODO: Setup project for prod environment
 // TODO: Setup project to run using docker
 // TODO: Setup test pipeline with github action
