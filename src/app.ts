@@ -10,7 +10,6 @@ const app: Application = express();
 const ENV = process.env.NODE_ENV as string;
 
 app.use(express.json());
-// logger.info(`The env is ${process.env.NODE_ENV}`);
 
 if (ENV === 'development') {
   app.use(morgan('combined'));

@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 
-import logger from './src/utils/logger';
-
-import { connectToDB } from './config/db';
 import app from './src/app';
+import logger from './src/utils/logger';
+import { connectToDB } from './config/db';
 
 dotenv.config({ path: './config/config.env' });
 
