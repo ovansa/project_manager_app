@@ -1,7 +1,5 @@
-import { application } from 'express';
 import request from 'supertest';
 import { server } from '../../../server';
-import app from '../../app';
 import { disconnectDB } from '../../../config/db';
 
 afterEach(async () => {
