@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only server.ts",
     "start": "NODE_ENV=production ts-node server.ts",
-    "test": "NODE_ENV=test jest --testTimeout=30000",
+    "test": "NODE_ENV=test jest --testTimeout=30000 --detectOpenHandles",
+    "test:watch": "NODE_ENV=test jest --testTimeout=30000 --detectOpenHandles --watch",
     "lint": "eslint . --fix"
   },
   "dependencies": {
