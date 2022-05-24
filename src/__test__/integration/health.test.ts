@@ -10,7 +10,7 @@ describe('Test Health', () => {
   it('should return valid health status', async () => {
     const res = await await request(server).get('/');
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(2030);
     expect(res.body.success).toBe(true);
     expect(res.body.message).toBe('Alhamdulillah!');
 
