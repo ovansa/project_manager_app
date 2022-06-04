@@ -10,6 +10,7 @@ const app: Application = express();
 const ENV = process.env.NODE_ENV as string;
 
 app.use(express.json());
+// logger.info(`The env is ${process.env.NODE_ENV}`);
 
 if (ENV === 'development') {
   app.use(morgan('combined'));
@@ -18,6 +19,9 @@ if (ENV === 'development') {
 app.use('/', health);
 
 export default app;
+
+// TODO: Create model for Users
+// TODO: Create model for Organization
 
 // TODO: Setup test to use local database ✅
 // TODO: Setup project for prod environment
