@@ -3,6 +3,7 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 
 import health from './routes/health.routes';
+import organization from './routes/organization.routes';
 import user from './routes/user.routes';
 
 dotenv.config({ path: './config/config.env' });
@@ -19,6 +20,7 @@ if (ENV === 'development') {
 
 app.use('/', health);
 app.use('/api/user', user);
+app.use('/api/organization', organization);
 
 export default app;
 
