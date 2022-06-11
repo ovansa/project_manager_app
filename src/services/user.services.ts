@@ -21,4 +21,18 @@ export class UserService {
     const user = await User.create(userInput);
     return user;
   }
+
+  public async getAllUsers(): Promise<IUser[]> {
+    return User.find();
+  }
+
+  public async findUserById(
+    userId: Types.ObjectId | string
+  ): Promise<IUser | null> {
+    return User.findOne({ _id: userId });
+  }
+
+  public async findUserByEmail(userEmail: string): Promise<IUser | null> {
+    return User.findOne({ email: userEmail });
+  }
 }

@@ -1,6 +1,7 @@
 import mongoose, { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { UserRoles } from '../utils/constants';
+import { IOrganization } from './organization.model';
 
 export interface IUser extends mongoose.Document {
   firstName: string;
@@ -11,7 +12,7 @@ export interface IUser extends mongoose.Document {
   password: string;
   createdAt: Date;
   updatedAt: Date;
-  organization: Types.ObjectId;
+  organizationId: IOrganization['_id'];
 }
 
 const userSchema = new mongoose.Schema(
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema(
     verified: { type: Boolean, default: false },
     role: { type: String, enum: UserRoles, default: UserRoles.DEFAULT_USER },
     password: { type: String, required: true, select: false },
-    organization: { type: mongoose.Types.ObjectId, ref: 'Organization' },
+    organizationId: { type: mongoose.Types.ObjectId, ref: 'Organization' },
   },
   {
     timestamps: true,

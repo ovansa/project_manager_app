@@ -16,22 +16,43 @@ export const registerUser = async (
   next: NextFunction
 ) => {
   try {
-    const { organizationId } = req.body;
-    console.log(`Org id from body: ${organizationId}`);
+    const { organizationId, email } = req.body;
 
     const organization = await organizationService.findById({ organizationId });
-    console.log(organization);
     if (!organization) {
       return res
         .status(400)
         .json({ success: false, message: 'Organization is not found' });
     }
 
-    const user = await userService.create(req.body);
-    console.log(user);
-    console.log(sanitizeUser(user));
+    const requestBody = {
+      ...req.body,
+      organizationId: organization._id,
+    };
+
+    const userExists = await userService.findUserByEmail(email);
+    if (userExists) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Email address is already taken' });
+    }
+
+    const user = await userService.create(requestBody);
     return res.status(201).json({ success: true, user: sanitizeUser(user) });
   } catch (err: any) {
     next(err);
+  }
+};
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const users = await userService.getAllUsers();
+    return res.status(200).json({ success: true, users });
+  } catch (error) {
+    next(error);
   }
 };
