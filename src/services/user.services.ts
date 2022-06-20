@@ -1,8 +1,6 @@
 import { Types } from 'mongoose';
 import { Service } from 'typedi';
 
-import sanitizeUser from '../utils/sanitizeUser';
-
 import User, { IUser } from '../models/user.model';
 import { UserRoles } from '../utils/constants';
 

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.services';
 import sanitizeUser from '../utils/sanitizeUser';
 import { OrganizationService } from '../services/organization.service';
+import CustomError, { OrganizationNotFoundError } from '../utils/customError';
 
 const userService = Container.get(UserService);
 const organizationService = Container.get(OrganizationService);
@@ -20,9 +21,7 @@ export const registerUser = async (
 
     const organization = await organizationService.findById({ organizationId });
     if (!organization) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Organization is not found' });
+      return next(new OrganizationNotFoundError());
     }
 
     const requestBody = {
@@ -56,3 +55,5 @@ export const getAllUsers = async (
     next(error);
   }
 };
+
+// Add custom error messages
