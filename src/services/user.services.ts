@@ -14,7 +14,7 @@ interface UserInput {
 }
 
 @Service()
-export class UserService {
+export default class UserService {
   public async create(userInput: UserInput): Promise<IUser | null> {
     const user = await User.create(userInput);
     return user;

@@ -10,9 +10,27 @@ class CustomError extends Error {
   }
 }
 
+export class EmailInUseError extends CustomError {
+  constructor() {
+    super('Email address is already taken', 400);
+  }
+}
+
 export class OrganizationNotFoundError extends CustomError {
   constructor() {
-    super('Organization not found', 500);
+    super('Organization not found', 404);
+  }
+}
+
+export class UnauthorizedError extends CustomError {
+  constructor() {
+    super('User is unauthorized', 401);
+  }
+}
+
+export class InvalidEmailPasswordError extends CustomError {
+  constructor() {
+    super('Invalid email or password', 401);
   }
 }
 

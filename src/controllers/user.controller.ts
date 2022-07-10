@@ -1,9 +1,15 @@
 import Container from 'typedi';
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/user.services';
-import sanitizeUser from '../utils/sanitizeUser';
+import UserService from '../services/user.services';
 import { OrganizationService } from '../services/organization.service';
-import CustomError, { OrganizationNotFoundError } from '../utils/customError';
+import {
+  EmailInUseError,
+  InvalidEmailPasswordError,
+  OrganizationNotFoundError,
+  UnauthorizedError,
+} from '../utils/customError';
+import { IAuthInfoRequest } from '../utils/definitions';
+import { sendTokenResponse } from '../utils/sendTokenResponse';
 
 const userService = Container.get(UserService);
 const organizationService = Container.get(OrganizationService);
@@ -31,26 +37,61 @@ export const registerUser = async (
 
     const userExists = await userService.findUserByEmail(email);
     if (userExists) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'Email address is already taken' });
+      return next(new EmailInUseError());
     }
 
     const user = await userService.create(requestBody);
-    return res.status(201).json({ success: true, user: sanitizeUser(user) });
+    sendTokenResponse(user, 201, res);
   } catch (err: any) {
     next(err);
   }
 };
 
+// @desc    Get All Users
+// @route   GET /api/user/all
+// @access  Private
 export const getAllUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const request = req as IAuthInfoRequest;
+
+    const user = await userService.findUserById(request.user._id);
+    if (!user) {
+      return next(new UnauthorizedError());
+    }
+
     const users = await userService.getAllUsers();
     return res.status(200).json({ success: true, users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Login
+// @route   POST /api/user/login
+// @access  Private
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await userService.findUserByEmail(email);
+    if (!user) {
+      return next(new InvalidEmailPasswordError());
+    }
+
+    const isMatch = await user.matchPasswords(password);
+    if (!isMatch) {
+      return next(new InvalidEmailPasswordError());
+    }
+
+    sendTokenResponse(user, 200, res);
   } catch (error) {
     next(error);
   }
