@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import morgan from 'morgan';
+import errorResponse from './middleware/error';
 
 import health from './routes/health.routes';
 import organization from './routes/organization.routes';
@@ -18,9 +19,13 @@ if (ENV === 'development') {
   app.use(morgan('combined'));
 }
 
+// Routes
 app.use('/', health);
 app.use('/api/user', user);
 app.use('/api/organization', organization);
+
+// Custom middleware
+app.use(errorResponse);
 
 export default app;
 

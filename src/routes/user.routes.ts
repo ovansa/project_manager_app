@@ -1,8 +1,19 @@
-import express from 'express';
-import { registerUser } from '../controllers/user.controller';
+import express, { RequestHandler } from 'express';
+import requireAuth from '../middleware/authentication';
+import {
+  getAllUsers,
+  loginUser,
+  registerUser,
+} from '../controllers/user.controller';
+import validateResource from '../middleware/validateResource';
+import { loginUserSchema, registerUserSchema } from '../schema/user.schema';
 
 const router = express.Router();
 
-router.post('/register', registerUser);
+const requireLogin = requireAuth as unknown as RequestHandler;
+
+router.get('/all', requireLogin, getAllUsers);
+router.post('/login', validateResource(loginUserSchema), loginUser);
+router.post('/register', validateResource(registerUserSchema), registerUser);
 
 export default router;

@@ -1,6 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserRoles } from 'src/utils/constants';
+import jwt from 'jsonwebtoken';
+import { UserRoles } from '../utils/constants';
+import { IOrganization } from './organization.model';
 
 export interface IUser extends mongoose.Document {
   firstName: string;
@@ -11,6 +13,8 @@ export interface IUser extends mongoose.Document {
   password: string;
   createdAt: Date;
   updatedAt: Date;
+  organizationId: IOrganization['_id'];
+  matchPasswords(userPassword: string): Promise<Boolean>;
 }
 
 const userSchema = new mongoose.Schema(
@@ -20,7 +24,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true },
     verified: { type: Boolean, default: false },
     role: { type: String, enum: UserRoles, default: UserRoles.DEFAULT_USER },
-    password: { type: String, required: true, select: false },
+    password: { type: String, required: true },
+    organizationId: { type: mongoose.Types.ObjectId, ref: 'Organization' },
   },
   {
     timestamps: true,
@@ -41,6 +46,13 @@ userSchema.pre('save', async function (next) {
 
   return next();
 });
+
+userSchema.methods.getSignedJwtToken = function () {
+  const secret = process.env.JWT_SECRET as string;
+  return jwt.sign({ id: this._id }, secret, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
 
 userSchema.methods.matchPasswords = async function (
   userPassword: string

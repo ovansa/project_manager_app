@@ -1,6 +1,7 @@
 import Container from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import { OrganizationService } from '../services/organization.service';
+import { OrganizationNotFoundError } from '../utils/customError';
 
 const organizationService = Container.get(OrganizationService);
 
@@ -41,6 +42,10 @@ export const getOrganizationById = async (
   try {
     const organizationId = req.params.id;
     const organization = await organizationService.findById({ organizationId });
+
+    if (!organization) {
+      return next(new OrganizationNotFoundError());
+    }
 
     return res.status(200).json({ success: true, organization });
   } catch (error) {

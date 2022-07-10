@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import { Service } from 'typedi';
 
 import Organization, { IOrganization } from '../models/organization.model';
@@ -15,7 +15,6 @@ export class OrganizationService {
   }: {
     values: OrganizationInput;
   }): Promise<IOrganization | null> {
-    console.log(values);
     return Organization.create({ name: values.name, slug: values.slug });
   }
 
@@ -26,7 +25,7 @@ export class OrganizationService {
   public async findById({
     organizationId,
   }: {
-    organizationId: mongoose.Types.ObjectId | string;
+    organizationId: Types.ObjectId | string;
   }): Promise<IOrganization | null> {
     return Organization.findOne({ _id: organizationId }).lean();
   }
