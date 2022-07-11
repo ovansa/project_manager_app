@@ -45,92 +45,92 @@ describe('Register User', () => {
     expect(res.body).not.toHaveProperty('password');
   });
 
-  it('should return valid response on register user with valid input as a project manager role', async () => {
-    const { organizationOne } = await createDocument();
-    const body = {
-      firstName: 'Khalid',
-      lastName: 'Mahmoud',
-      email: 'khalil@gmail.com',
-      role: UserRoles.PROJECT_MANAGER,
-      password: 'password123',
-      organizationId: organizationOne._id,
-    };
+  // it('should return valid response on register user with valid input as a project manager role', async () => {
+  //   const { organizationOne } = await createDocument();
+  //   const body = {
+  //     firstName: 'Khalid',
+  //     lastName: 'Mahmoud',
+  //     email: 'khalil@gmail.com',
+  //     role: UserRoles.PROJECT_MANAGER,
+  //     password: 'password123',
+  //     organizationId: organizationOne._id,
+  //   };
 
-    const res = await await request(server)
-      .post('/api/user/register')
-      .send(body)
-      .set('Accept', 'application/json');
+  //   const res = await await request(server)
+  //     .post('/api/user/register')
+  //     .send(body)
+  //     .set('Accept', 'application/json');
 
-    const { firstName, email, role, organizationId } = res.body.user;
+  //   const { firstName, email, role, organizationId } = res.body.user;
 
-    expect(res.status).toBe(201);
-    expect(firstName).toBe(body.firstName);
-    expect(email).toBe(body.email);
-    expect(role).toBe(body.role);
-    expect(organizationId).toBe(body.organizationId.toString());
-  });
+  //   expect(res.status).toBe(201);
+  //   expect(firstName).toBe(body.firstName);
+  //   expect(email).toBe(body.email);
+  //   expect(role).toBe(body.role);
+  //   expect(organizationId).toBe(body.organizationId.toString());
+  // });
 
-  it('should return valid error on register user with an invalid user role', async () => {
-    const { organizationOne } = await createDocument();
-    const body = {
-      firstName: 'Khalid',
-      lastName: 'Mahmoud',
-      email: 'khalil@gmail.com',
-      role: 'stakeholder',
-      password: 'password123',
-      organizationId: organizationOne._id,
-    };
+  // it('should return valid error on register user with an invalid user role', async () => {
+  //   const { organizationOne } = await createDocument();
+  //   const body = {
+  //     firstName: 'Khalid',
+  //     lastName: 'Mahmoud',
+  //     email: 'khalil@gmail.com',
+  //     role: 'stakeholder',
+  //     password: 'password123',
+  //     organizationId: organizationOne._id,
+  //   };
 
-    const res = await await request(server)
-      .post('/api/user/register')
-      .send(body)
-      .set('Accept', 'application/json');
+  //   const res = await await request(server)
+  //     .post('/api/user/register')
+  //     .send(body)
+  //     .set('Accept', 'application/json');
 
-    expect(res.status).toBe(400);
-    expect(res.body.message).toBe('Role must be a valid user role');
-    expect(res.body.success).toBeFalsy();
-  });
+  //   expect(res.status).toBe(400);
+  //   expect(res.body.message).toBe('Role must be a valid user role');
+  //   expect(res.body.success).toBeFalsy();
+  // });
 
-  it('should return valid error on register user with an email that exists', async () => {
-    const { organizationOne, userOne } = await createDocument();
-    const body = {
-      firstName: 'Khalid',
-      lastName: 'Mahmoud',
-      email: userOne.email,
-      role: UserRoles.ADMIN,
-      password: 'password123',
-      organizationId: organizationOne._id,
-    };
+  // it('should return valid error on register user with an email that exists', async () => {
+  //   const { organizationOne, userOne } = await createDocument();
+  //   const body = {
+  //     firstName: 'Khalid',
+  //     lastName: 'Mahmoud',
+  //     email: userOne.email,
+  //     role: UserRoles.ADMIN,
+  //     password: 'password123',
+  //     organizationId: organizationOne._id,
+  //   };
 
-    const res = await await request(server)
-      .post('/api/user/register')
-      .send(body)
-      .set('Accept', 'application/json');
+  //   const res = await await request(server)
+  //     .post('/api/user/register')
+  //     .send(body)
+  //     .set('Accept', 'application/json');
 
-    expect(res.status).toBe(400);
-    expect(res.body.error).toBe('Email address is already taken');
-    expect(res.body.success).toBeFalsy();
-  });
+  //   expect(res.status).toBe(400);
+  //   expect(res.body.error).toBe('Email address is already taken');
+  //   expect(res.body.success).toBeFalsy();
+  // });
 
-  it('should return valid error on register user with an organization that does not exist', async () => {
-    const body = {
-      firstName: 'Khalid',
-      lastName: 'Mahmoud',
-      email: 'khalil@gmail.com',
-      role: UserRoles.ADMIN,
-      password: 'password123',
-      organizationId: new mongoose.Types.ObjectId(),
-    };
+  // it('should return valid error on register user with an organization that does not exist', async () => {
+  //   const body = {
+  //     firstName: 'Khalid',
+  //     lastName: 'Mahmoud',
+  //     email: 'khalil@gmail.com',
+  //     role: UserRoles.ADMIN,
+  //     password: 'password123',
+  //     organizationId: new mongoose.Types.ObjectId(),
+  //   };
 
-    const res = await await request(server)
-      .post('/api/user/register')
-      .send(body)
-      .set('Accept', 'application/json');
+  //   const res = await await request(server)
+  //     .post('/api/user/register')
+  //     .send(body)
+  //     .set('Accept', 'application/json');
 
-    expect(res.status).toBe(404);
-    expect(res.body.error).toBe('Organization does not exist');
-    expect(res.body.success).toBeFalsy();
-  });
+  //   expect(res.status).toBe(404);
+  //   expect(res.body.error).toBe('Organization does not exist');
+  //   expect(res.body.success).toBeFalsy();
+  // });
 });
 
 // describe('Login User', () => {
