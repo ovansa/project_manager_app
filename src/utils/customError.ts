@@ -18,7 +18,7 @@ export class EmailInUseError extends CustomError {
 
 export class OrganizationNotFoundError extends CustomError {
   constructor() {
-    super('Organization not found', 404);
+    super('Organization does not exist', 404);
   }
 }
 

@@ -1,15 +1,19 @@
 import request from 'supertest';
 import { server } from '../../../server';
-import { disconnectDB } from '../../../config/db';
+import { connectToDB, disconnectDB } from '../../../config/db';
 
 afterAll(async () => {
   await disconnectDB();
   await server.close();
 });
 
+beforeEach(async () => {
+  await connectToDB();
+});
+
 describe('Test Health', () => {
   it('should return valid health status', async () => {
-    const res = await await request(server).get('/');
+    const res = await request(server).get('/');
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);

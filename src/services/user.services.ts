@@ -31,6 +31,13 @@ export default class UserService {
   }
 
   public async findUserByEmail(userEmail: string): Promise<IUser | null> {
-    return User.findOne({ email: userEmail });
+    const user = await User.findOne({ email: userEmail }).select('password');
+    return User.findOne({ email: userEmail }).select('+password');
+  }
+
+  public async findUsersByOrganization(
+    organizationId: Types.ObjectId | string
+  ): Promise<IUser[]> {
+    return User.find({ organizationId });
   }
 }

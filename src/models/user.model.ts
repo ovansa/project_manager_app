@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true },
     verified: { type: Boolean, default: false },
     role: { type: String, enum: UserRoles, default: UserRoles.DEFAULT_USER },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
     organizationId: { type: mongoose.Types.ObjectId, ref: 'Organization' },
   },
   {

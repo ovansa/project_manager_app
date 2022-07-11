@@ -29,10 +29,4 @@ app.use(errorResponse);
 
 export default app;
 
-// TODO: Create model for Users
-// TODO: Create model for Organization
-
-// TODO: Setup test to use local database ✅
-// TODO: Setup project for prod environment
 // TODO: Setup project to run using docker
-// TODO: Setup test pipeline with github action ✅
