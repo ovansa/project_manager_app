@@ -7,7 +7,7 @@ import { connectToDB } from './config/db';
 
 dotenv.config({ path: './config/config.env' });
 
-const PORT = process.env.PORT as unknown as number;
+const PORT = (process.env.PORT as unknown as number) || 5000;
 const ENV = process.env.NODE_ENV as string;
 
 const server = app.listen(PORT, async () => {
