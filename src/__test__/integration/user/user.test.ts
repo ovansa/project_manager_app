@@ -16,23 +16,6 @@ afterAll(async () => {
   await server.close();
 });
 
-var token: string;
-
-// beforeAll(async () => {
-//   const { userOne } = await createDocument();
-//   const body = {
-//     email: userOne.email,
-//     password: userOne.password,
-//   };
-//   request(server)
-//     .post('/api/user/login')
-//     .send(body)
-//     .end((err, res) => {
-//       if (err) throw err;
-//       token = res.body.token;
-//     });
-// });
-
 describe('Register User', () => {
   it('should return valid response on register user with valid input as an admin role', async () => {
     const { organizationOne } = await createDocument();
@@ -205,16 +188,11 @@ describe('Gat All Users', () => {
   it('should return all users in the system', async () => {
     const { userOne } = await createDocument();
     const token = await loginUser(userOne as IUser, server);
-    console.log(token);
 
     const res = await request(server)
       .get('/api/user/all')
       .set('Authorization', `Bearer ${token}`);
 
-    const users = await User.find();
-    console.log(users);
-
-    console.log(res.body);
     expect(res.status).toBe(200);
     expect(res.body.users.length).toBe(4);
   });
