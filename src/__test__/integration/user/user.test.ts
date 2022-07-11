@@ -133,53 +133,53 @@ describe('Register User', () => {
   });
 });
 
-describe('Login User', () => {
-  it('should return valid response on login with an existing email and a valid password', async () => {
-    const { userOne } = await createDocument();
-    const body = {
-      email: userOne.email,
-      password: userOne.password,
-    };
+// describe('Login User', () => {
+//   it('should return valid response on login with an existing email and a valid password', async () => {
+//     const { userOne } = await createDocument();
+//     const body = {
+//       email: userOne.email,
+//       password: userOne.password,
+//     };
 
-    const res = await await request(server)
-      .post('/api/user/login')
-      .send(body)
-      .set('Accept', 'application/json');
+//     const res = await await request(server)
+//       .post('/api/user/login')
+//       .send(body)
+//       .set('Accept', 'application/json');
 
-    expect(res.status).toBe(200);
-    expect(res.body.token).not.toBeUndefined();
-    expect(userOne.email).toBe(res.body.user.email);
-  });
+//     expect(res.status).toBe(200);
+//     expect(res.body.token).not.toBeUndefined();
+//     expect(userOne.email).toBe(res.body.user.email);
+//   });
 
-  it('should not return user password on a successful login', async () => {
-    const { userOne } = await createDocument();
-    const body = {
-      email: userOne.email,
-      password: userOne.password,
-    };
+//   it('should not return user password on a successful login', async () => {
+//     const { userOne } = await createDocument();
+//     const body = {
+//       email: userOne.email,
+//       password: userOne.password,
+//     };
 
-    const res = await await request(server)
-      .post('/api/user/login')
-      .send(body)
-      .set('Accept', 'application/json');
+//     const res = await await request(server)
+//       .post('/api/user/login')
+//       .send(body)
+//       .set('Accept', 'application/json');
 
-    expect(res.body.user).not.toHaveProperty('password');
-    expect(res.body).not.toHaveProperty('password');
-  });
+//     expect(res.body.user).not.toHaveProperty('password');
+//     expect(res.body).not.toHaveProperty('password');
+//   });
 
-  it('should return valid error response on login with an email that does not exist', async () => {
-    const body = {
-      email: 'not.exist@gmail.com',
-      password: 'password',
-    };
+//   it('should return valid error response on login with an email that does not exist', async () => {
+//     const body = {
+//       email: 'not.exist@gmail.com',
+//       password: 'password',
+//     };
 
-    const res = await await request(server)
-      .post('/api/user/login')
-      .send(body)
-      .set('Accept', 'application/json');
+//     const res = await await request(server)
+//       .post('/api/user/login')
+//       .send(body)
+//       .set('Accept', 'application/json');
 
-    expect(res.status).toBe(401);
-    expect(res.body.error).toBe('Invalid email or password');
-    expect(res.body.success).toBeFalsy();
-  });
-});
+//     expect(res.status).toBe(401);
+//     expect(res.body.error).toBe('Invalid email or password');
+//     expect(res.body.success).toBeFalsy();
+//   });
+// });
