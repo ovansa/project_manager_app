@@ -2,9 +2,10 @@ import request from 'supertest';
 import { server } from '../../../../server';
 import { connectToDB, disconnectDB } from '../../../../config/db';
 import { createDocument } from '../../data';
-import { clearDatabase } from '../../helpers';
+import { clearDatabase, loginUser } from '../../helpers';
 import { UserRoles } from '../../../utils/constants';
 import mongoose from 'mongoose';
+import User, { IUser } from '../../../models/user.model';
 
 afterEach(async () => {
   await clearDatabase();
@@ -14,6 +15,23 @@ afterAll(async () => {
   await disconnectDB();
   await server.close();
 });
+
+var token: string;
+
+// beforeAll(async () => {
+//   const { userOne } = await createDocument();
+//   const body = {
+//     email: userOne.email,
+//     password: userOne.password,
+//   };
+//   request(server)
+//     .post('/api/user/login')
+//     .send(body)
+//     .end((err, res) => {
+//       if (err) throw err;
+//       token = res.body.token;
+//     });
+// });
 
 describe('Register User', () => {
   it('should return valid response on register user with valid input as an admin role', async () => {
@@ -180,5 +198,24 @@ describe('Login User', () => {
     expect(res.status).toBe(401);
     expect(res.body.error).toBe('Invalid email or password');
     expect(res.body.success).toBeFalsy();
+  });
+});
+
+describe('Gat All Users', () => {
+  it('should return all users in the system', async () => {
+    const { userOne } = await createDocument();
+    const token = await loginUser(userOne as IUser, server);
+    console.log(token);
+
+    const res = await request(server)
+      .get('/api/user/all')
+      .set('Authorization', `Bearer ${token}`);
+
+    const users = await User.find();
+    console.log(users);
+
+    console.log(res.body);
+    expect(res.status).toBe(200);
+    expect(res.body.users.length).toBe(4);
   });
 });
