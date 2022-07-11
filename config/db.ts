@@ -12,7 +12,7 @@ const env = process.env.NODE_ENV as string;
 export const connectToDB = async () => {
   try {
     const conn = await mongoose.connect(db_url);
-    logger.info(`DB Connected: ${conn.connection.host}`);
+    logger.debug(`DB Connected: ${conn.connection.host}`);
   } catch (err) {
     logger.error(`Could not connect to DB: ${err}`);
     process.exit(1);

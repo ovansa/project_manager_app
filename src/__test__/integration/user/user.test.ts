@@ -8,12 +8,11 @@ import mongoose from 'mongoose';
 
 afterEach(async () => {
   await clearDatabase();
-  await disconnectDB();
-  server.close();
 });
 
-beforeEach(async () => {
-  await connectToDB();
+afterAll(async () => {
+  await disconnectDB();
+  await server.close();
 });
 
 describe('Register User', () => {
