@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 afterEach(async () => {
   await clearDatabase();
   await disconnectDB();
-  await server.close();
+  server.close();
 });
 
 beforeEach(async () => {
@@ -28,7 +28,7 @@ describe('Register User', () => {
       organizationId: organizationOne._id,
     };
 
-    const res = await await request(server)
+    const res = await request(server)
       .post('/api/user/register')
       .send(body)
       .set('Accept', 'application/json');

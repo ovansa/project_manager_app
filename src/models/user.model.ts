@@ -48,9 +48,9 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.getSignedJwtToken = function () {
-  const secret = process.env.JWT_SECRET as string;
+  const secret = (process.env.JWT_SECRET as string) || 'alghashiyah';
   return jwt.sign({ id: this._id }, secret, {
-    expiresIn: process.env.JWT_EXPIRE,
+    expiresIn: process.env.JWT_EXPIRE || '10d',
   });
 };
 

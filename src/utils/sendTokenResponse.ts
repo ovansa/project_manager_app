@@ -8,7 +8,8 @@ export const sendTokenResponse = (
   res: Response
 ) => {
   const token = user.getSignedJwtToken();
-  const cookie_expire = process.env.JWT_COOKIE_EXPIRE as unknown as number;
+  const cookie_expire =
+    (process.env.JWT_COOKIE_EXPIRE as unknown as number) || 30;
   const sanitizedUser = sanitizeUser(user);
 
   const options = {

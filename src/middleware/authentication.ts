@@ -26,7 +26,7 @@ const requireAuth = async (
   }
 
   try {
-    const secret = process.env.JWT_SECRET as string;
+    const secret = (process.env.JWT_SECRET as string) || 'alghashiyah';
     const decoded = jwt.verify(token, secret) as any;
 
     const user = await userService.findUserById(decoded.id);
