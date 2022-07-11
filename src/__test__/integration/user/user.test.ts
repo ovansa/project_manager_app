@@ -33,6 +33,8 @@ describe('Register User', () => {
       .send(body)
       .set('Accept', 'application/json');
 
+    console.log(res.body);
+
     const { firstName, email, role, organizationId, verified } = res.body.user;
 
     expect(res.status).toBe(201);

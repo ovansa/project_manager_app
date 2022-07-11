@@ -7,7 +7,7 @@ const {
 } = config;
 
 const env = process.env.NODE_ENV as string;
-logger.info(`The DB URL for ${env} is ${db_url}`);
+// logger.info(`The DB URL for ${env} is ${db_url}`);
 
 export const connectToDB = async () => {
   try {
