@@ -178,3 +178,5 @@ export const acceptUserInvite = asyncHandler(
     sendTokenResponse(user, 200, res, 'Invite accepted!');
   }
 );
+
+// TODO: Refactor update user in accept invite to use services instead.
