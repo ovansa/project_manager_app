@@ -196,4 +196,41 @@ describe('Gat All Users', () => {
     expect(res.status).toBe(200);
     expect(res.body.users.length).toBe(4);
   });
+
+  it('should return a valid error message when a valid token is not applied', async () => {
+    const token = 'eyJhbGciOiJIUzI1Qkp4_S0Xl4tzo5otJ58_FpEuMX7-8QyNLkMMIf3tY';
+
+    const res = await request(server)
+      .get('/api/user/all')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('User is unauthorized');
+  });
+});
+
+describe('Gat Users By Organization', () => {
+  it('should return only users in a specified organization', async () => {
+    const { userOne } = await createDocument();
+    const token = await loginUser(userOne as IUser, server);
+
+    const res = await request(server)
+      .get(`/api/user/all/${userOne.organizationId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.users.length).toBe(2);
+  });
+
+  it('should return only users in a specified organization', async () => {
+    const { userOne } = await createDocument();
+    const token = 'eyJhbGciOiJIUzI1Qkp4_S0Xl4tzo5otJ58_FpEuMX7-8QyNLkMMIf3tY';
+
+    const res = await request(server)
+      .get(`/api/user/all/${userOne.organizationId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('User is unauthorized');
+  });
 });
