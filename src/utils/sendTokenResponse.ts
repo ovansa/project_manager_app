@@ -5,7 +5,8 @@ import sanitizeUser from './sanitizeUser';
 export const sendTokenResponse = (
   user: InstanceType<typeof User>,
   statusCode: number,
-  res: Response
+  res: Response,
+  message?: string
 ) => {
   const token = user.getSignedJwtToken();
   const cookie_expire =
@@ -22,8 +23,14 @@ export const sendTokenResponse = (
     options.secure = true;
   }
 
+  const partialResponse = { success: true, token, user: sanitizedUser };
+  const responseBody = Object.assign(
+    {},
+    partialResponse,
+    message && { message }
+  );
   return res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({ success: true, token, user: sanitizedUser });
+    .json(responseBody);
 };

@@ -30,3 +30,15 @@ export const registerUserSchema = yup.object({
     organizationId: yup.string().required('organizationId is required'),
   }),
 });
+
+export const acceptUserInviteSchema = yup.object({
+  body: yup.object({
+    password: yup
+      .string()
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters'),
+  }),
+  params: yup.object({
+    invitetoken: yup.string().required('Invite token is required'),
+  }),
+});

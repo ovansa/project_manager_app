@@ -34,4 +34,16 @@ export class InvalidEmailPasswordError extends CustomError {
   }
 }
 
+export class InvalidTokenError extends CustomError {
+  constructor() {
+    super('Invalid token provided', 400);
+  }
+}
+
+export class EmailNotSentError extends CustomError {
+  constructor() {
+    super('Email could not be sent', 500);
+  }
+}
+
 export default CustomError;

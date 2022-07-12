@@ -1,5 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { UserRoles } from '../utils/constants';
 import { IOrganization } from './organization.model';
@@ -14,7 +15,10 @@ export interface IUser extends mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
   organizationId: IOrganization['_id'];
+  inviteToken: string | undefined;
+  inviteTokenExpired: Date | undefined;
   matchPasswords(userPassword: string): Promise<Boolean>;
+  getInviteToken(): Promise<string>;
 }
 
 const userSchema = new mongoose.Schema(
@@ -24,8 +28,10 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true },
     verified: { type: Boolean, default: false },
     role: { type: String, enum: UserRoles, default: UserRoles.DEFAULT_USER },
-    password: { type: String, required: true, select: false },
+    password: { type: String, select: false },
     organizationId: { type: mongoose.Types.ObjectId, ref: 'Organization' },
+    inviteToken: String,
+    inviteTokenExpired: Date,
   },
   {
     timestamps: true,
@@ -52,6 +58,18 @@ userSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, secret, {
     expiresIn: process.env.JWT_EXPIRE || '10d',
   });
+};
+
+userSchema.methods.getInviteToken = function () {
+  const inviteToken = crypto.randomBytes(20).toString('hex');
+  this.inviteToken = crypto
+    .createHash('sha256')
+    .update(inviteToken)
+    .digest('hex');
+
+  this.inviteTokenExpired = Date.now() + 10 * 60 * 1000;
+
+  return inviteToken;
 };
 
 userSchema.methods.matchPasswords = async function (

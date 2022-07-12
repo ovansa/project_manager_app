@@ -13,6 +13,17 @@ interface UserInput {
   organizationId: Types.ObjectId;
 }
 
+// interface UserSearchCriteria {
+//   firstName?: string;
+//   lastName?: string;
+//   email?: string;
+//   role?: UserRoles;
+//   password?: string;
+//   organizationId?: Types.ObjectId;
+//   inviteToken?: string;
+//   inviteTokenExpired?: Object;
+// }
+
 @Service()
 export default class UserService {
   public async create(userInput: UserInput): Promise<IUser | null> {
@@ -31,7 +42,6 @@ export default class UserService {
   }
 
   public async findUserByEmail(userEmail: string): Promise<IUser | null> {
-    const user = await User.findOne({ email: userEmail }).select('password');
     return User.findOne({ email: userEmail }).select('+password');
   }
 
@@ -39,5 +49,9 @@ export default class UserService {
     organizationId: Types.ObjectId | string
   ): Promise<IUser[]> {
     return User.find({ organizationId });
+  }
+
+  public async findUserByCriteria(criteria: any) {
+    return User.findOne(criteria);
   }
 }
