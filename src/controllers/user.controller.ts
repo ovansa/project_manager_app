@@ -178,3 +178,5 @@ export const acceptUserInvite = asyncHandler(
     sendTokenResponse(user, 200, res, 'Invite accepted!');
   }
 );
+
+// TODO: Create readme for project
